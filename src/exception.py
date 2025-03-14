@@ -1,4 +1,5 @@
 import sys
+from src.logger import logging 
 
 def error_message_details(error):
     """Extracts detailed error information including filename and line number."""
@@ -16,16 +17,14 @@ def error_message_details(error):
 
 class CustomException(Exception):
     def __init__(self, error):
-        """Initializes the exception with a detailed error message."""
+        """Initializes the exception with a detailed error message and logs it."""
         super().__init__(str(error))  # Call Exception constructor
-        self.error_message = error_message_details(error)  # Store detailed error
+        self.error_message = error_message_details(error)
+        
+        # Log the error message with traceback
+        logging.error(self.error_message, exc_info=True)
 
     def __str__(self):
         """Returns the detailed error message."""
         return self.error_message
 
-# Example Usage
-try:
-    a = 1 / 0  # This will raise ZeroDivisionError
-except Exception as e:
-    raise CustomException(e)
